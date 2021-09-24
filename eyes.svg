@@ -4,7 +4,7 @@
     to { transform: translate(-8px, -1px); }
   }
 
-//svg:hover
+/* svg:hover */
   .p {
     animation: 1s look alternate infinite;
   }
