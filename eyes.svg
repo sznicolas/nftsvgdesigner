@@ -1,0 +1,16 @@
+<svg viewBox="0 0 100 50"  id="svg1" xmlns="http://www.w3.org/2000/svg" >
+<style>
+@keyframes look {
+  to { transform: translate(-8px, -1px); }
+}
+
+svg:hover .p {
+  animation: 1s look alternate infinite;
+}
+</style>
+
+        <ellipse class="ey" cx="25" cy="25" rx="12" ry="16" style="stroke:#a1830b; fill:#fff" />
+        <circle class="p" cx="25" cy="25" r="6" />
+        <ellipse class="ey" cx="55" cy="25" rx="12" ry="16" style="stroke:#a1830b; fill:#fff" />
+        <circle class="p" cx="55" cy="25" r="6" />
+</svg>
