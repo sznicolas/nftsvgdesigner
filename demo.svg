@@ -1,0 +1,55 @@
+<!-- reformated with 
+>>> import xml.dom.minidom
+>>> dom = xml.dom.minidom.parseString(t.a_testall())
+>>> print(dom.toprettyxml())
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 255 255 ">
+	<style>#r1{fill:url(#gr1);stroke:rgba(0,0,0,100%);stroke-width:2;}</style>
+	<style>#p1{fill:none;stroke:rgba(0,255,0,100%);stroke-width:10;}</style>
+	<style>#p2{fill:none;stroke:rgba(0,128,0,44%);stroke-width:1;}</style>
+	<style>#c1{fill:rgba(148,0,211,85%);stroke:rgba(0,0,128,32%);stroke-width:10;}</style>
+	<style>#e1{fill:rgba(0,100,0,70%);stroke:rgba(0,0,205,89%);stroke-width:10;}</style>
+	<rect x="0" y="0" width="255" height="255" id="r1"/>
+	<use href="#r1" x="152" y="136" id="ur1"/>
+	<polyline points="0 100 16 100 100 100 16 0 " id="p1"/>
+	<circle cx="74" cy="74" r="16" id="c1"/>
+	<ellipse cx="26" cy="154" rx="16" ry="32" id="e1"/>
+	<polygon points="255 51 204 119 170 68 0 51 " id="p2"/>
+	<linearGradient id="gr1">
+		<stop offset="0%" stop-color="rgba(255,0,0,100%)" id="gr10"/>
+		<stop offset="100%" stop-color="rgba(136,34,34,255%)" id="gr1100"/>
+	</linearGradient>
+	<text x="10" y="18">Click the Gauge!</text>
+	<symbol id="G1">
+		<path d="M10 50 A40 40 0 0 1 100 50 " stroke-linecap="round" pathLength="100" stroke-dasharray="100, 100" id="bgG1"/>
+		<path d="M10 50 A40 40 0 0 1 100 50 " stroke-linecap="round" pathLength="100" id="fgG1"/>
+		<linearGradient id="grfgG1">
+			<stop offset="0%" stop-color="rgba(182,80,158,100%)" id="grfgG10"/>
+			<stop offset="100%" stop-color="rgba(46,186,198,100%)" id="grfgG1100"/>
+		</linearGradient>
+		<style>#bgG1{fill:none;stroke:rgba(169,169,169,100%);stroke-width:10;}</style>
+		<style>#fgG1{fill:none;stroke:url(#grfgG1);stroke-width:9;}</style>
+	</symbol>
+	<symbol id="G2">
+		<path d="M10 50 A40 40 0 0 1 100 50 " stroke-linecap="round" pathLength="100" stroke-dasharray="100, 100" id="bgG2"/>
+		<path d="M10 50 A40 40 0 0 1 100 50 " stroke-linecap="round" pathLength="100" id="fgG2"/>
+		<linearGradient id="grfgG2">
+			<stop offset="0%" stop-color="rgba(128,0,0,100%)" id="grfgG20"/>
+			<stop offset="20%" stop-color="rgba(255,0,0,100%)" id="grfgG220"/>
+			<stop offset="40%" stop-color="rgba(255,215,0,100%)" id="grfgG240"/>
+			<stop offset="60%" stop-color="rgba(255,255,0,100%)" id="grfgG260"/>
+			<stop offset="80%" stop-color="rgba(0,255,0,100%)" id="grfgG280"/>
+			<stop offset="100%" stop-color="rgba(0,128,0,100%)" id="grfgG2100"/>
+		</linearGradient>
+		<style>#bgG2{fill:none;stroke:rgba(169,169,169,100%);stroke-width:10;}</style>
+		<style>#fgG2{fill:none;stroke:url(#grfgG2);stroke-width:9;}</style>
+	</symbol>
+	<use href="#G1" x="10" y="10" id="g1" stroke-dasharray="99,100"/>
+	<use href="#G2" x="110" y="10" id="g2" stroke-dasharray="98,100"/>
+	<animate href="#g1" attributeName="stroke-dasharray" values="0 10 ;88 100 ;" dur="5s" begin="click"/>
+	<animate href="#g2" attributeName="stroke-dasharray" values="0 10 ;88 100 ;" dur="3s"/>
+	<animate href="#c1" attributeName="r" values="29 ;31 ;9 ;29 ;" dur="3s" repeatCount="indefinite"/>
+	<animate href="#c1" attributeName="stroke-width" values="1 ;31 ;9 ;1 ;8 ;4 ;28 ;1 ;" dur="13s" repeatCount="indefinite"/>
+	<animate href="#p2" attributeName="points" values="255 51 204 119 170 68 0 51 ;34 136 68 26 26 187 100 100 ;255 51 204 119 170 68 0 51 ;" dur="8s" repeatCount="indefinite"/>
+	<animateTransform href="#g1" attributeName="transform" type="rotate" values="0 52 68 ;255 68 51 ;" dur="19s" begin="click"/>
+</svg>
