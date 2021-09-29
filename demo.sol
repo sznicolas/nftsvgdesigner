@@ -29,7 +29,6 @@ contract Test2 {
     ISvgTools   sTools ;
 
     bytes constant bgRect = hex'000000ffff';
-    bytes constant bgStyle = hex'00334477ff00000000';
 
     constructor(address _SvgWigets, address _sTools){
         SvgWidgets = ISvgWidgets(_SvgWigets);
