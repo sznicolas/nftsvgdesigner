@@ -36,6 +36,44 @@ contract Test2 {
         sTools   = ISvgTools(_sTools);
     }
 
+    function a_aave(uint _health, uint8 _health_percent) public view returns(string memory){
+        bytes memory bgSize = hex'0000006488'; //with opt byte 
+        bytes memory gauge = abi.encodePacked(
+            sTools.autoLinearGradient( // gradient
+                hex'20000064',
+                abi.encodePacked(
+                    sTools.getColor('Aave1'),
+                    sTools.getColor('Aave2')
+                ),
+                'grBg',
+                ''
+            ),
+            SvgWidgets.gaugeVBar('GL1'),
+            SvgCore.use(
+                hex'00010a',
+                '#GL1',
+                abi.encodePacked(
+                    'id="gl1" stroke-dasharray="',
+                    _health_percent.toString(),
+                    ' 100"'
+                )
+            )
+        );
+        return string(
+            abi.encodePacked(
+                SvgCore.startSvg(bgSize, 'height="400"'),
+                SvgCore.rect(bgSize, 'id="rectBg" rx="5"'),
+                gauge,
+                '<style>text{font-family:sans;}</style>',
+                SvgCore.style(svgStyle(1, 0, "#rectBg", "#grBg", '')),
+                SvgCore.text(hex'301a', 'Aave', 'font-size="small"'),
+                SvgCore.text(hex'1a4a', 'Health Factor', 'font-size="x-small"'),
+                SvgCore.text(hex'227a', sTools.toEthTxt(_health, 2), 'class="hf"'),
+                SvgCore.endSvg()
+            )
+        );
+    }
+
     function a_testall() public view returns(string memory){
          return string(
             abi.encodePacked(
@@ -44,6 +82,7 @@ contract Test2 {
                 a_testShapes(),
                 a_testWidgets(),
                 a_testAnimate(),
+                SvgCore.use(hex'006e64', '#GL2','id="gl2" stroke-dasharray="48,100"'),
                 SvgCore.endSvg()
             )
         );
@@ -96,7 +135,7 @@ contract Test2 {
                 SvgCore.ellipse(hex'001a9a1020', 'id="e1"'),
                 SvgCore.polygon(hex'00ff33cc77aa440033', 'id="p2"'),
                 SvgCore.linearGradient(hex'0000ff00006464882222ff', 'gr1', ''),
-                SvgCore.text(hex'0a12', '', 'Click the Gauge!')
+                SvgCore.text(hex'0a12', 'Click the Gauge!', '')
         ));
     }
 
