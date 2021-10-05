@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 136 " height="400" style="font-family:sans;font-size:4px">
+	<rect x="0" y="0" width="100" height="136" id="rectBg" rx="3"/>
+	<style>#rectBg{fill:rgba(248,248,255,100%);stroke:rgba(0,0,128,100%);stroke-width:2;}</style>
+	<symbol id="gvb">
+		<line x1="9.0001" y1="100.0001" x2="9" y2="9" stroke-linecap="round" pathLength="100" stroke-dasharray="100, 100" id="bggvb"/>
+		<line x1="9.0001" y1="100.0001" x2="9" y2="9" stroke-linecap="round" pathLength="100" id="fggvb"/>
+		<linearGradient id="grfggvb" x1="0%" x2="0%" y1="100%" y2="0%">
+			<stop offset="0%" stop-color="rgba(255,0,0,100%)" id="grfggvb0"/>
+			<stop offset="50%" stop-color="rgba(255,255,0,100%)" id="grfggvb50"/>
+			<stop offset="100%" stop-color="rgba(0,128,0,100%)" id="grfggvb100"/>
+		</linearGradient>
+		<style>#bggvb{fill:none;stroke:rgba(169,169,169,100%);stroke-width:10;}</style>
+		<style>#fggvb{fill:none;stroke:url(#grfggvb);stroke-width:9;}</style>
+	</symbol>
+	<text x="10" y="120">MATICx</text>
+	<text x="10" y="124">0.0d</text>
+	<use href="#gvb" x="10" y="10" id="MATICx" stroke-dasharray="0 100"/>
+	<text x="26" y="120">ETHx</text>
+	<text x="26" y="124">669.8d</text>
+	<use href="#gvb" x="26" y="10" id="ETHx" stroke-dasharray="100 100"/>
+	<text x="42" y="120">USDCx</text>
+	<text x="42" y="124">9.7d</text>
+	<use href="#gvb" x="42" y="10" id="USDCx" stroke-dasharray="9 100"/>
+	<text x="58" y="120">DAIx</text>
+	<text x="58" y="124">0.0d</text>
+	<use href="#gvb" x="58" y="10" id="DAIx" stroke-dasharray="0 100"/>
+	<text x="74" y="120">WBTCx</text>
+	<text x="74" y="124">0.0d</text>
+	<use href="#gvb" x="74" y="10" id="WBTCx" stroke-dasharray="0 100"/>
+</svg>
