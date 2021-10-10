@@ -16,71 +16,111 @@ interface ISvgTools {
 contract SvgWidgets {
 
     using Strings for uint256;
-    ISvgTools   SvgTools ;
+    ISvgTools   sTools ;
     // path defines an arc
     bytes constant gaugeArcPath = hex'004d0a324128280000016432';
     bytes constant gaugeHLine   =  hex'0009096409';
     bytes constant gaugeVLine   =  hex'0009640909';
-    bytes constant gaugeStyleStr = 'stroke-linecap="round" pathLength="100" ';
+    bytes constant gaugeStyleStr = 'pathLength="100" ';
+    // Compressed path data for SuperFluid logo (with prefix '00'):
+    bytes constant logoSFPath  = hex'004d1f184c18184c18104c10104c10094c1f094c1f185a4d091f4c101f4c10184c09184c091f5a4d00044c0024430026022804284c2428432628282628244c2804432802260024004c0400430200000200044c00045a';
 
-    constructor(address _SvgTools){
-        SvgTools   = ISvgTools(_SvgTools);
+    constructor(address _sTools){
+        sTools   = ISvgTools(_sTools);
     }
 
     /*  ---------------- Symbols ---------- */
 
-    // Creates style for gauge background
-    function gaugeBgStyle(bytes memory _id) internal view returns (svgStyle memory) {
+    // returns an arc gauge <symbol> shape
+    // can be displayed with <use href='#`_id`' ...
+    function includeSymbolGaugeArc(
+        bytes memory _id
+    ) external view returns (bytes memory) {
+        return SvgCore.symbol(
+            _id,    
+            abi.encodePacked(
+                SvgCore.path( // background
+                    gaugeArcPath,
+                    gaugeStyleBgCustom(_id)
+                ),
+                SvgCore.path( // gauge's display
+                    gaugeArcPath,
+                    gaugeStyleFgCustom(_id)
+                ),
+                SvgCore.style(_gaugeBgStyle(_id), '')
+            ) 
+        );
+    } 
+
+    // returns a vertical bar gauge <symbol> shape
+    // can be displayed with <use href='#`_id`' ...
+    function includeSymbolGaugeV(
+        bytes memory _id
+    ) external view returns (bytes memory) {
+
+        return SvgCore.symbol(
+            _id,    
+            abi.encodePacked(
+                SvgCore.line(
+                    gaugeVLine,
+                    gaugeStyleBgCustom(_id)
+                ),
+                SvgCore.line(
+                    gaugeVLine,
+                    gaugeStyleFgCustom(_id)
+                ),
+                SvgCore.style(_gaugeBgStyle(_id), '')
+            )
+        );
+    } 
+    //  returns an eye symbol.
+    function includeSymbolEye(
+        bytes memory _id
+    ) external view returns (bytes memory) {
+        return SvgCore.symbol(
+            _id,
+            abi.encodePacked(
+                SvgCore.ellipse(hex'0010100b0f', 'style="stroke:#a1830b;fill:#fff"'),
+                SvgCore.circle(hex'00101006', 'id="swpupil" style="fill:#000"')
+            )
+        );
+    }
+/* Example of use:
+    <use href="#eye" x="10" y="10" class="ee"/>
+    <use href="#eye" x="40" y="10" class="ee" />
+    <animate href="#p1" attributeName="cx" values="16;8;6;9;16" dur="2s" repeatCount="1"/>
+    <symbol id="eye">
+                                                             
+        <ellipse  cx="16" cy="16" rx="11" ry="15" style="stroke:#a1830b; fill:#fff" />     
+        <circle class="ckb" id="p1" cx="16" cy="16" r="6">                      
+        </circle>
+*/
+    // returns Superfluid logo as a <symbol>
+    // can be displayed with <use href='#`_id`' ...
+    function includeSymbolSFLogo(bytes memory _id)
+    public view returns (bytes memory){
+        return SvgCore.symbol(
+            _id,
+            SvgCore.path(
+                logoSFPath,
+                'fill-rule="evenodd" fill="#12141E"'
+            )
+        );
+    }
+
+    /*  ---------------- Internal functions ---------- */
+    // Returns a svgStyle for gauges background
+    function _gaugeBgStyle(bytes memory _id) internal view returns (svgStyle memory) {
         return svgStyle(
             0,  // no option
             10, // stroke width 10
             abi.encodePacked('#', 'bg', _id), // id
             '', // no fill
-            SvgTools.getColor('DarkGrey') // stroke color
+            sTools.getColor('DarkGrey') // stroke color
         );
     }
 
-    function gaugeFgStyle(bytes memory _id)
-    internal pure returns (svgStyle memory) {
-        return svgStyle(
-            2,
-            9,
-            abi.encodePacked('#', 'fg', _id), // id
-            '',
-            abi.encodePacked('#', 'grfg', _id) // gradiendid
-        );
-    }
-    function defaultGaugeGradient() internal view returns (bytes memory) {
-            return abi.encodePacked(
-                    SvgTools.getColor('Red'),
-                    SvgTools.getColor('Yellow'),
-                    SvgTools.getColor('Green')
-            );
-    }
-
-    // Gauge1 is a semi-circle gauge 
-    // pass a number between 0 and 100 to fill the gauge
-    // Optional: pass a gradient def to fill the gauge
-    // Uses default Red to Green gradient
-    function gaugeArc(
-        bytes memory _id
-    ) external view returns (bytes memory) {
-        return _gaugeArc(
-            _id,
-            defaultGaugeGradient()
-        );
-    }
-
-    function gaugeArc(
-        bytes memory _id,
-        bytes memory _grad
-    ) external view returns (bytes memory) {
-        return _gaugeArc(
-            _id,
-            _grad
-        );
-    }
-
+    // Returns textual style attributes for background 
     function gaugeStyleBgCustom(bytes memory _id)
     internal pure returns (bytes memory) {
         return abi.encodePacked(
@@ -91,6 +131,7 @@ contract SvgWidgets {
         );
     }
 
+    // Returns textual style attributes for the foreground 
     function gaugeStyleFgCustom(bytes memory _id)
     internal pure returns (bytes memory) {
         return abi.encodePacked(
@@ -98,131 +139,6 @@ contract SvgWidgets {
             'id="fg',
            _id,
             '"' 
-        );
-    }
-    function _gaugeArc(
-        bytes memory _id,
-        bytes memory _grad
-    ) internal view returns (bytes memory) {
-        return SvgCore.symbol(
-            _id,    
-            abi.encodePacked(
-                SvgCore.path(
-                    gaugeArcPath,
-                    gaugeStyleBgCustom(_id)
-                ),
-                SvgCore.path(
-                    gaugeArcPath,
-                    gaugeStyleFgCustom(_id)
-                ),
-                SvgTools.autoLinearGradient(
-                    _grad,
-                    abi.encodePacked('grfg', _id),
-                    ''
-                ),
-                SvgCore.style(
-                    gaugeBgStyle(_id),
-                    ''
-                ),
-                SvgCore.style(gaugeFgStyle(_id), '')
-            ) 
-        );
-    } 
-
-    function gaugeHBar(
-        bytes memory _id
-    ) external view returns (bytes memory) {
-        return _gaugeHBar(
-            _id,
-            defaultGaugeGradient()
-        );
-    }
-
-    function gaugeHBar(
-        bytes memory _id,
-        bytes memory _grad
-    ) external view returns (bytes memory) {
-        return _gaugeHBar(
-            _id,
-            _grad
-        );
-    }
-
-    function _gaugeHBar(
-        bytes memory _id,
-        bytes memory _grad
-    ) internal view returns (bytes memory) {
-        return SvgCore.symbol(
-            _id,    
-            abi.encodePacked(
-                SvgCore.line(
-                    gaugeHLine,
-                    gaugeStyleBgCustom(_id)
-                ),
-                SvgCore.line(
-                    gaugeHLine,
-                    gaugeStyleFgCustom(_id)
-                ),
-                SvgTools.autoLinearGradient(
-                    _grad,
-                    abi.encodePacked('grfg', _id),
-                    ''
-                ),
-                SvgCore.style(
-                    gaugeBgStyle(_id),
-                    ''
-                ),
-                SvgCore.style(gaugeFgStyle(_id), '')
-            ) 
-        );
-    }
-
-    function gaugeVBar(
-        bytes memory _id
-    ) external view returns (bytes memory) {
-        return _gaugeVBar(
-            _id,
-            defaultGaugeGradient()
-        );
-    }
-
-    function gaugeVBar(
-        bytes memory _id,
-        bytes memory _grad
-    ) external view returns (bytes memory) {
-        return _gaugeVBar(
-            _id,
-            _grad
-        );
-    }
-
-    function _gaugeVBar(
-        bytes memory _id,
-        bytes memory _grad
-    ) internal view returns (bytes memory) {
-        return SvgCore.symbol(
-            _id,    
-            abi.encodePacked(
-                SvgCore.line(
-                    gaugeVLine,
-                    gaugeStyleBgCustom(_id)
-                ),
-                SvgCore.line(
-                    gaugeVLine,
-                    gaugeStyleFgCustom(_id)
-                ),
-                SvgTools.autoLinearGradient(
-                    hex'00000064', // turn the gradient to 0,0 0,100
-                    _grad,
-                    abi.encodePacked('grfg', _id),
-                    ''
-                ),
-                SvgCore.style(
-                    gaugeBgStyle(_id),
-                    ''
-                ),
-                SvgCore.style(gaugeFgStyle(_id), '')
-            ) 
         );
     }
 }

@@ -42,10 +42,10 @@ library SvgCore {
 
     // Open <svg> tag
     // _vBSize defines the viewBox in 4 bytes
-    //   [1] x
-    //   [2] y
-    //   [3] length
-    //   [4] width
+    //   [0] x
+    //   [1] y
+    //   [2] length
+    //   [3] width
     // accepts custom attributes in _customAttributes
     function startSvg(
         bytes memory _vBSize,
@@ -54,7 +54,7 @@ library SvgCore {
         return abi.encodePacked(
             '<svg ',
             'viewBox="',
-            stringifyIntSet(_vBSize, 1, 4),
+            stringifyIntSet(_vBSize, 0, 4),
             '" xmlns="http://www.w3.org/2000/svg" ',
             _customAttributes,
             '>'
@@ -67,6 +67,19 @@ library SvgCore {
         return('</svg>');
     }
 
+    // <g _customAttributes></g> tag encloses _b
+    function defs(
+        bytes memory _b,
+        bytes memory _customAttributes
+    ) public pure returns (bytes memory) {
+        return abi.encodePacked(
+            '<g ',
+            _customAttributes,
+            '>',
+            _b,
+            '</g>'
+        );
+    }
     // <defs></defs> tag encloses _b
     function defs(
         bytes memory _b
@@ -431,15 +444,15 @@ library SvgCore {
     // Non standard ; _b only contains coordinates.
     function text(
         bytes memory _b,
-        bytes memory _customAttributes,
-        bytes memory _text
+        bytes memory _text,
+        bytes memory _customAttributes
     ) external pure returns (bytes memory) {
         return abi.encodePacked(
             '<text x="', 
             byte2uint8(_b, 0).toString(),
             '" y="',
             byte2uint8(_b, 1).toString(),
-            '"',
+            '" ',
             _customAttributes,
             '>',
             _text,

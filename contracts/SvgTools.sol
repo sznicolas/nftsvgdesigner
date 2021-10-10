@@ -13,6 +13,8 @@ contract SvgTools {
     constructor () {
         colors['Black'] = hex'000000'; 
         colors['White'] = hex'FFFFFF'; 
+        colors['SFRed'] = hex'E02020'; 
+        colors['SFGreen'] = hex'10BB34'; 
         colors['Aave1'] = hex'B6509E';
         colors['Aave2'] = hex'2EBAC6';
         colors['Navy'] = hex'000080'; 
@@ -26,6 +28,7 @@ contract SvgTools {
         colors['Gold'] = hex'FFD700'; 
         colors['Yellow'] = hex'FFFF00'; 
         colors['Blue'] = hex'0000FF'; 
+        colors['GhostWhite'] = hex'F8F8FF'; 
         colors['LightGrey'] = hex'D3D3D3'; 
         colors['DarkViolet'] = hex'9400D3'; 
     }
@@ -33,14 +36,32 @@ contract SvgTools {
     /* -------------------------------------
     *  Various helpers
        ------------------------------------- */
-    function getColor(string memory _colorName)
+
+    // starts a <sgv> tag with a rect at the same size.
+    function startSvgRect(
+        bytes memory _size,
+        bytes memory _svgAttrs,
+        bytes memory _rectAttrs
+    )
     external view returns (bytes memory) {
+        return abi.encodePacked(
+            SvgCore.startSvg(_size, _svgAttrs),
+            SvgCore.rect(
+                abi.encodePacked(
+                    hex'00',
+                    _size),
+                _rectAttrs)
+        );
+    }
+
+    function getColor(string memory _colorName)
+    public view returns (bytes memory) {
         require(colors[_colorName].length == 3, "Unknown color");
         return abi.encodePacked(colors[_colorName], hex'64');
     }
 
     function getColor(string memory _colorName, uint8 _alpha)
-    external view returns (bytes memory) {
+    public view returns (bytes memory) {
         require(colors[_colorName].length == 3, "Unknown color");
         return abi.encodePacked(colors[_colorName], _alpha);
     }
@@ -52,7 +73,7 @@ contract SvgTools {
         bytes memory _id,
         bytes memory _customAttributes
     )
-    external view returns (bytes memory) {
+    public view returns (bytes memory) {
         return this.autoLinearGradient('', _colors, _id, _customAttributes);
     }
     function autoLinearGradient(
@@ -87,16 +108,19 @@ contract SvgTools {
         }
         return SvgCore.linearGradient(_b, _id, _customAttributes);
     } 
-    // Converts 10 ** 18 value to 'decimal' text
-    function toEthTxt(
+
+
+    // Converts uint value to 'decimal' text
+    function round2Txt(
         uint256 _value,
+        uint8 _decimals,
         uint8 _prec
     ) public pure returns (bytes memory) {
         return abi.encodePacked(
-            (_value / 10 ** 18).toString(), 
+            (_value / 10 ** _decimals).toString(), 
             ".",
-            ( _value / 10 ** (18 - _prec) -
-                _value / 10 ** (18 ) * 10 ** _prec
+            ( _value / 10 ** (_decimals - _prec) -
+                _value / 10 ** (_decimals ) * 10 ** _prec
             ).toString()
         );
     }
