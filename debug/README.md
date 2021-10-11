@@ -27,7 +27,7 @@ contract Indicators is ERC721, ERC721URIStorage, ERC721Enumerable, Ownable {
     constructor(address _SvgWigets, address _sTools) ERC721('Indicators', 'IDC')
 ```
 
-# Unsuccessful attemps
+# Unsuccessful attempts
 Tested for each param set two times, with the first and the second library address.  
 Added `// SPDX-License-Identifier: MIT` on top of the [flatten file](./flatten_indicators.sol)
 With https://abi.hashex.org/ :
